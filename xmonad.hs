@@ -6,7 +6,7 @@ import XMonad.Hooks.ManageHelpers (isFullscreen, doFullFloat)
 import XMonad.Hooks.ManageDocks (avoidStruts)
 import XMonad.Layout.NoBorders (smartBorders, noBorders)
 import XMonad.Layout.Tabbed (tabbed)
-import XMonad.Layout.Decoration (shrinkText, defaultTheme)
+import XMonad.Layout.Decoration (shrinkText, defaultTheme, activeBorderColor, activeColor, activeTextColor, inactiveBorderColor, inactiveColor, inactiveTextColor, decoHeight)
 import XMonad.Layout.Fullscreen (fullscreenFull)
 import XMonad.Layout.Spiral (spiral)
 import XMonad.Util.EZConfig (additionalKeysP)
@@ -60,10 +60,25 @@ myManageHook = composeAll . concat $
 myLayout = avoidStruts (
     Tall 1 (3/100) (1/2) |||
     Mirror (Tall 1 (3/100) (1/2)) |||
-    tabbed shrinkText defaultTheme |||
+    tabbed shrinkText myTabColors |||
     Full |||
     spiral (6/7)) |||
     noBorders (fullscreenFull Full)
+
+
+------------------------------------------------------------------------
+-- My Tabbed Layout colors
+-- Chosen to match Molokai colors
+
+myTabColors = defaultTheme
+  { activeColor         = "#5B5A4E"
+  , activeBorderColor   = "#999999"
+  , activeTextColor     = "#FFFFFF"
+  , inactiveColor       = "#1B1D1E"
+  , inactiveBorderColor = "#403D3D"
+  , inactiveTextColor   = "#FFFFFF"
+  , decoHeight          = 16
+  }
 
 
 ------------------------------------------------------------------------
