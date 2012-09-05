@@ -1,6 +1,8 @@
 -- xmonad configuration used by Anupam Jain
 -- Author: Anupam Jain
-import XMonad
+import XMonad hiding ((|||))
+import XMonad.Layout.LayoutCombinators ((|||), JumpToLayout(..))
+import XMonad.Layout.Renamed (renamed, Rename(..))
 import XMonad.Config.Gnome (gnomeConfig)
 import XMonad.Hooks.ManageHelpers (isFullscreen, doFullFloat)
 import XMonad.Hooks.ManageDocks (avoidStruts)
@@ -8,7 +10,7 @@ import XMonad.Layout.NoBorders (smartBorders, noBorders)
 import XMonad.Layout.Tabbed (tabbed)
 import XMonad.Layout.Decoration (shrinkText, defaultTheme, activeBorderColor, activeColor, activeTextColor, inactiveBorderColor, inactiveColor, inactiveTextColor, decoHeight)
 import XMonad.Layout.Fullscreen (fullscreenFull)
-import XMonad.Layout.Spiral (spiral)
+--import XMonad.Layout.Spiral (spiral)
 import XMonad.Util.EZConfig (additionalKeysP)
 import qualified XMonad.StackSet as W
 
@@ -38,13 +40,13 @@ myManageHook = composeAll . concat $
     [ [ manageHook gnomeConfig ]
     , [ className =? c --> doIgnore | c <- myIgnores]
     , [ className =? c --> doFloat | c <- myFloats]
-    , [ className =? c --> doShift "2:web" | c <- myWebs]
+    --, [ className =? c --> doShift "2:web" | c <- myWebs]
     , [ isFullscreen   --> (doF W.focusDown <+> doFullFloat)]
     ]
   where
     myIgnores = ["Synapse", "Guake.py"]
     myFloats  = ["Galculator"]
-    myWebs    = ["Firefox", "Chromium", "Google-chrome"]
+    --myWebs    = ["Firefox", "Chromium", "Google-chrome"]
 
 
 ------------------------------------------------------------------------
@@ -55,15 +57,27 @@ myManageHook = composeAll . concat $
 -- defaults, as xmonad preserves your old layout settings by default.
 --
 -- The available layouts.  Note that each layout is separated by |||,
--- which denotes layout choice.
+-- which denotes layout choice. We use the modified implementation
+-- from XMonad.Layout.LayoutCombinators so that we can jump to a
+-- specific Layout instead of having to cycle through them.
 --
-myLayout = avoidStruts (
-    Tall 1 (3/100) (1/2) |||
-    Mirror (Tall 1 (3/100) (1/2)) |||
-    tabbed shrinkText myTabColors |||
-    Full |||
-    spiral (6/7)) |||
-    noBorders (fullscreenFull Full)
+-- We also provide descriptive names to some layouts to make it
+-- easy to jump to them.
+--
+
+myLayout =
+  -- These do not overlap with gnome-panel
+  avoidStruts
+   (   rename "Tall"       ( Tall 1 (3/100) (1/2)            )
+   ||| rename "Mirror"     ( Mirror (Tall 1 (3/100) (1/2))   )
+   ||| rename "Tabbed"     ( tabbed shrinkText myTabColors   )
+   ||| rename "Maximised"  ( Full                            )
+   -- ||| rename "Spiral"     ( spiral (6/7)                    )
+   )
+  -- These effectively take over the entire screen
+  |||  rename "Fullscreen" ( noBorders (fullscreenFull Full) )
+  where
+    rename s = renamed [Replace s]
 
 
 ------------------------------------------------------------------------
@@ -85,7 +99,12 @@ myTabColors = defaultTheme
 -- Key bindings
 -- Using EZConfig
 myKeys =
-  [
+  -- Setup M-x subspace keys to directly jump to layouts
+  [ ( "M-S-<Up>", sendMessage $ JumpToLayout "Fullscreen" )
+  , ( "M-S-f",    sendMessage $ JumpToLayout "Maximised"  )
+  , ( "M-S-t",    sendMessage $ JumpToLayout "Tabbed"     )
+  , ( "M-S-l",    sendMessage $ JumpToLayout "Tall"       )
+  , ( "M-S-m",    sendMessage $ JumpToLayout "Mirror"     )
   ]
 
 
