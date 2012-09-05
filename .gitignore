@@ -1,0 +1,11 @@
+dist
+*~
+tmp
+_darcs
+*.old.hs
+xmonad-i386-linux
+*.o
+*.hi
+*.errors
+tags
+
