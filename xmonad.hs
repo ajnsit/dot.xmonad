@@ -11,7 +11,7 @@ import XMonad.Layout.Tabbed (tabbed)
 import XMonad.Layout.Decoration (shrinkText, defaultTheme, activeBorderColor, activeColor, activeTextColor, inactiveBorderColor, inactiveColor, inactiveTextColor, decoHeight)
 import XMonad.Layout.Fullscreen (fullscreenFull)
 --import XMonad.Layout.Spiral (spiral)
-import XMonad.Util.EZConfig (additionalKeysP)
+import XMonad.Util.EZConfig (additionalKeysP, removeKeysP)
 import qualified XMonad.StackSet as W
 
 ------------------------------------------------------------------------
@@ -98,29 +98,42 @@ myTabColors = defaultTheme
 ------------------------------------------------------------------------
 -- Key bindings
 -- Using EZConfig
-myKeys =
-  -- Setup M-x subspace keys to directly jump to layouts
-  [ ( "M-S-<Up>", sendMessage $ JumpToLayout "Fullscreen" )
-  , ( "M-S-f",    sendMessage $ JumpToLayout "Maximised"  )
-  , ( "M-S-t",    sendMessage $ JumpToLayout "Tabbed"     )
-  , ( "M-S-l",    sendMessage $ JumpToLayout "Tall"       )
-  , ( "M-S-m",    sendMessage $ JumpToLayout "Mirror"     )
+myKeys = concat
+  [
+    -- Setup M-x subspace keys to directly jump to layouts
+    [ ( "M-S-<Up>", sendMessage $ JumpToLayout "Fullscreen" )
+    , ( "M-S-f",    sendMessage $ JumpToLayout "Maximised"  )
+    , ( "M-S-t",    sendMessage $ JumpToLayout "Tabbed"     )
+    , ( "M-S-l",    sendMessage $ JumpToLayout "Tall"       )
+    , ( "M-S-m",    sendMessage $ JumpToLayout "Mirror"     )
+    ],
+    -- Use the dmenu shortcut for Synapse
+    [ ( "M-p",      spawn "exec synapse"            )
+    ]
   ]
 
+-- Key bindings to remove
+myUnKeys =
+    -- Remove default dmenu binding to allow overriding
+    -- (already changed by gnome-config to gnome-run command)
+    [ "M-p"
+    ]
 
 ------------------------------------------------------------------------
 -- Combine it all together
 -- A structure containing your configuration settings, overriding
--- fields in the default config. Any you don't override, will 
+-- fields in the default config. Any you don't override, will
 -- use the defaults defined in xmonad/XMonad/Config.hs
--- 
+--
 -- No need to modify this.
 --
 defaults = gnomeConfig
   { workspaces         = myWorkspaces
   , layoutHook         = smartBorders myLayout
   , manageHook         = myManageHook
-  } `additionalKeysP` myKeys
+  }
+  `removeKeysP`     myUnKeys
+  `additionalKeysP` myKeys
 
 
 ------------------------------------------------------------------------
