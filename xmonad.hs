@@ -13,10 +13,12 @@ import XMonad.Layout.Fullscreen (fullscreenFull)
 --import XMonad.Layout.Spiral (spiral)
 import XMonad.Util.EZConfig (additionalKeysP, removeKeysP)
 import qualified XMonad.StackSet as W
+import XMonad.Util.Scratchpad (scratchpadSpawnActionCustom, scratchpadManageHook)
 
 ------------------------------------------------------------------------
 -- Workspaces
 -- The default number of workspaces (virtual screens) and their names.
+-- NSP is used for XMonad.Util.Scratchpad
 --
 myWorkspaces = ["1:default", "2:web", "3:background", "4:misc"] ++ map show [5..9]
 
@@ -35,18 +37,21 @@ myWorkspaces = ["1:default", "2:web", "3:background", "4:misc"] ++ map show [5..
 -- To match on the WM_NAME, you can use 'title' in the same way that
 -- 'className' and 'resource' are used below.
 --
-myManageHook = composeAll . concat $
+myManageHook = (composeAll . concat $
     -- Merge in the gnome manageHook configuration
     [ [ manageHook gnomeConfig ]
     , [ className =? c --> doIgnore | c <- myIgnores]
     , [ className =? c --> doFloat | c <- myFloats]
     --, [ className =? c --> doShift "2:web" | c <- myWebs]
     , [ isFullscreen   --> (doF W.focusDown <+> doFullFloat)]
-    ]
+    ]) <+> manageScratchPad
   where
     myIgnores = ["Synapse", "Guake.py"]
     myFloats  = ["Galculator"]
     --myWebs    = ["Firefox", "Chromium", "Google-chrome"]
+    manageScratchPad :: ManageHook
+    -- Scratchpad terminal should cover the top 1/3 of the screen
+    manageScratchPad = scratchpadManageHook $ W.RationalRect 0 0 1 (1/3)
 
 
 ------------------------------------------------------------------------
@@ -108,7 +113,12 @@ myKeys = concat
     , ( "M-S-m",    sendMessage $ JumpToLayout "Mirror"     )
     ],
     -- Use the dmenu shortcut for Synapse
-    [ ( "M-p",      spawn "exec synapse"            )
+    [ ( "M-p",      spawn "exec synapse"                    )
+    ],
+    -- Setup a floating "Guake" like terminal window
+    -- Need to use a custom action with gnome-terminal because it does not
+    -- support -name attribute (uses --name instead)
+    [ ( "M-t",      scratchpadSpawnActionCustom "gnome-terminal --disable-factory --name scratchpad" )
     ]
   ]
 
