@@ -122,7 +122,8 @@ myKeys = concat
     -- Setup a floating "Guake" like terminal window
     -- Need to use a custom action with gnome-terminal because it does not
     -- support -name attribute (uses --name instead)
-    [ ( "M-t",      scratchpadSpawnActionCustom "gnome-terminal --disable-factory --name scratchpad" )
+    -- M4 is the "Win" or "Super" key
+    [ ( "M4-t",    scratchpadSpawnActionCustom "gnome-terminal --disable-factory --name scratchpad" )
     ],
     -- Layout - Current window magnifier key bindings
     [ ("M-=",   sendMessage MagnifyMore)
