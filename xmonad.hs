@@ -13,6 +13,7 @@ import XMonad.Layout.Fullscreen (fullscreenFull)
 import XMonad.Layout.Circle (Circle(..))
 import XMonad.Layout.Magnifier (magnifier, MagnifyMsg(..))
 --import XMonad.Layout.Spiral (spiral)
+import XMonad.Actions.CycleWS (prevScreen, nextScreen, shiftNextScreen)
 import XMonad.Util.EZConfig (additionalKeysP, removeKeysP)
 import qualified XMonad.StackSet as W
 import XMonad.Util.Scratchpad (scratchpadSpawnActionCustom, scratchpadManageHook)
@@ -132,6 +133,11 @@ myKeys = concat
     , ("M-S-o", sendMessage ToggleOn   )
     -- We reuse the same binding as "switch focus to master"
     , ("M-m",   sendMessage Toggle     )
+    ],
+    -- Bindings for dual monitor setup
+    [ ("M-C-<Right>", prevScreen)
+    , ("M-C-<Left>",  nextScreen)
+    , ("M-C-o",  shiftNextScreen)
     ]
   ]
 
