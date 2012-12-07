@@ -6,7 +6,7 @@ import XMonad.Layout.Renamed (renamed, Rename(..))
 import XMonad.Config.Gnome (gnomeConfig)
 import XMonad.Hooks.ManageHelpers (isFullscreen, doFullFloat)
 import XMonad.Hooks.ManageDocks (avoidStruts)
-import XMonad.Layout.NoBorders (smartBorders, noBorders)
+import XMonad.Layout.NoBorders (noBorders, lessBorders, Ambiguity(Screen))
 import XMonad.Layout.Tabbed (tabbed)
 import XMonad.Layout.Decoration (shrinkText, defaultTheme, activeBorderColor, activeColor, activeTextColor, inactiveBorderColor, inactiveColor, inactiveTextColor, decoHeight)
 import XMonad.Layout.Fullscreen (fullscreenFull)
@@ -155,7 +155,7 @@ myUnKeys =
 --
 defaults = gnomeConfig
   { workspaces         = myWorkspaces
-  , layoutHook         = smartBorders myLayout
+  , layoutHook         = lessBorders Screen myLayout
   , manageHook         = myManageHook
   }
   `removeKeysP`     myUnKeys
