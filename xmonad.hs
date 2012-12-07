@@ -22,7 +22,7 @@ import XMonad.Util.Scratchpad (scratchpadSpawnActionCustom, scratchpadManageHook
 -- The default number of workspaces (virtual screens) and their names.
 -- NSP is used for XMonad.Util.Scratchpad
 --
-myWorkspaces = ["1:default", "2:web", "3:background", "4:misc"] ++ map show [5..9]
+myWorkspaces = ["1:default", "2:web", "3:background", "4:misc"] ++ map show [5..8] ++ ["NSP"]
 
 
 ------------------------------------------------------------------------
