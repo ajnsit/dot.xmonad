@@ -17,6 +17,7 @@ import XMonad.Actions.CycleWS (prevScreen, nextScreen, shiftNextScreen)
 import XMonad.Util.EZConfig (additionalKeysP, removeKeysP)
 import qualified XMonad.StackSet as W
 import XMonad.Util.Scratchpad (scratchpadSpawnActionCustom, scratchpadManageHook)
+import XMonad.Hooks.EwmhDesktops (fullscreenEventHook)
 
 ------------------------------------------------------------------------
 -- Workspaces
@@ -163,6 +164,8 @@ defaults = gnomeConfig
   { workspaces         = myWorkspaces
   , layoutHook         = lessBorders Screen myLayout
   , manageHook         = myManageHook
+  -- Fix to enable fullscreen mode in Chromium etc.
+  , handleEventHook    = fullscreenEventHook
   }
   `removeKeysP`     myUnKeys
   `additionalKeysP` myKeys
