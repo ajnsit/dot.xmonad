@@ -44,9 +44,9 @@ myWorkspaces = ["1:default", "2:web", "3:background", "4:misc"] ++ map show [5..
 myManageHook = (composeAll . concat $
     -- Merge in the gnome manageHook configuration
     [ [ manageHook gnomeConfig ]
-    , [ className =? c --> doIgnore | c <- myIgnores]
-    , [ className =? c --> doFloat | c <- myFloats]
-    --, [ className =? c --> doShift "2:web" | c <- myWebs]
+    , [ className =? c --> doIgnore        | c  <- myIgnores]
+    , [ className =? c --> doFloat         | c  <- myFloats ]
+    , [ className =? c --> doShift "2:web" | c  <- myWebs   ]
     , [ isFullscreen   --> (doF W.focusDown <+> doFullFloat)]
     ]) <+> manageScratchPad
   where
