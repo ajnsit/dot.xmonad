@@ -52,7 +52,7 @@ myManageHook = (composeAll . concat $
   where
     myIgnores = ["Synapse", "Guake.py"]
     myFloats  = ["Galculator"]
-    --myWebs    = ["Firefox", "Chromium", "Google-chrome"]
+    myWebs    = [] --["Firefox", "Chromium", "Google-chrome"]
     manageScratchPad :: ManageHook
     -- Scratchpad terminal should cover the top 1/3 of the screen
     manageScratchPad = scratchpadManageHook $ W.RationalRect 0 0 1 (1/3)
